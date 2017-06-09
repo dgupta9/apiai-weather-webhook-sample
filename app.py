@@ -21,14 +21,10 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    print("###########################################")
-    print(str(request.data))
-    print("###########################################")
-    return
-    req = request.get_json(silent=True, force=True)
+    req = None#request.get_json(silent=True, force=True)
 
-    print("Request:")
-    print(json.dumps(req, indent=4))
+    #print("Request:")
+    #print(json.dumps(req, indent=4))
 
     res = processRequest(req)
 
@@ -40,10 +36,10 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "yahooWeatherForecast":
-        return {}
+    #if req.get("result").get("action") != "yahooWeatherForecast":
+    #    return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    yql_query = makeYqlQuery(req)
+    yql_query = makeYqlQuery("Tinton Falls")
     if yql_query is None:
         return {}
     yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
@@ -53,10 +49,10 @@ def processRequest(req):
     return res
 
 
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
+def makeYqlQuery(city):
+    #result = req.get("result")
+    #parameters = result.get("parameters")
+    #city = parameters.get("geo-city")
     if city is None:
         return None
 
